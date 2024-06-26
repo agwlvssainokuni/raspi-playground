@@ -18,6 +18,8 @@ package cherry.raspi.boardinfo;
 
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.ExitCodeGenerator;
@@ -31,12 +33,19 @@ import lombok.RequiredArgsConstructor;
 @Component()
 public class BoardInfoHandler implements ApplicationRunner, ExitCodeGenerator {
 
-    private final Context context;
-
+    private final Logger logger = LoggerFactory.getLogger(getClass());
     private final AtomicReference<Integer> exitCode = new AtomicReference<>();
+
+    private final Context context;
 
     @Override
     public void run(ApplicationArguments args) {
+
+        var boardinfo = context.boardInfo();
+        logger.info("BoardInfo");
+        logger.info("  BoardModel: {}", boardinfo.getBoardModel().getLabel());
+        logger.info("  OperatingSystem: {}", boardinfo.getOperatingSystem());
+        logger.info("  JavaInfo: {}", boardinfo.getJavaInfo());
 
         setExitCode(0);
     }
