@@ -26,11 +26,29 @@ dependencyManagement {
     imports {
         mavenBom 'org.springframework.boot:spring-boot-dependencies:3.3.1'
     }
+    dependencies {
+        dependency group: 'com.pi4j', name: 'pi4j-core', version: '2.6.0'
+        dependency group: 'com.pi4j', name: 'pi4j-plugin-raspberrypi', version: '2.6.0'
+        dependency group: 'com.pi4j', name: 'pi4j-plugin-mock', version: '2.6.0'
+        dependency group: 'com.pi4j', name: 'pi4j-plugin-gpiod', version: '2.6.0'
+        dependency group: 'com.pi4j', name: 'pi4j-plugin-pigpio', version: '2.6.0'
+        dependency group: 'com.pi4j', name: 'pi4j-plugin-linuxfs', version: '2.6.0'
+        dependency group: 'com.pi4j', name: 'pi4j-library-gpiod', version: '2.6.0'
+        dependency group: 'com.pi4j', name: 'pi4j-library-pigpio', version: '2.6.0'
+        dependency group: 'com.pi4j', name: 'pi4j-library-linuxfs', version: '2.6.0'
+        dependency group: 'com.pi4j', name: 'pi4j-test', version: '2.6.0'
+        dependency group: 'org.projectlombok', name: 'lombok', version: '1.18.32'
+    }
 }
 
 dependencies {
+    // https://mvnrepository.com/artifact/com.pi4j/pi4j-plugin-raspberrypi
+    implementation group: 'com.pi4j', name: 'pi4j-plugin-raspberrypi'
     // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter'
     // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test
     testImplementation group: 'org.springframework.boot', name: 'spring-boot-starter-test'
+    // https://mvnrepository.com/artifact/org.projectlombok/lombok
+    compileOnly group: 'org.projectlombok', name: 'lombok'
+    annotationProcessor group: 'org.projectlombok', name: 'lombok'
 }
