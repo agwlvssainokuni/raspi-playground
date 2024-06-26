@@ -16,31 +16,37 @@
 
 package cherry.raspi;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-import com.pi4j.Pi4J;
+import org.springframework.context.SmartLifecycle;
+import org.springframework.stereotype.Component;
+
 import com.pi4j.context.Context;
 
-@SpringBootApplication
-public class Main {
+import lombok.RequiredArgsConstructor;
 
-    public static void main(String[] args) {
-        System.exit(doMain(args));
+@RequiredArgsConstructor()
+@Component()
+public class Pi4JContextLifecycle implements SmartLifecycle {
+
+    private final Context context;
+
+    private final AtomicBoolean running = new AtomicBoolean(false);
+
+    @Override
+    public void start() {
+        running.set(true);
     }
 
-    public static int doMain(String[] args) {
-        try (var appctx = SpringApplication.run(Main.class, args)) {
-            return SpringApplication.exit(appctx);
-        }
+    @Override
+    public boolean isRunning() {
+        return running.get();
     }
 
-    @Bean
-    Context pi4jContext() {
-        return Pi4J.newContextBuilder()
-                .autoDetect()
-                .build();
+    @Override
+    public void stop() {
+        context.shutdown();
+        running.set(false);
     }
 
 }
