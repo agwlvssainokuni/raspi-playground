@@ -44,6 +44,8 @@ dependencyManagement {
 dependencies {
     // https://mvnrepository.com/artifact/com.pi4j/pi4j-plugin-raspberrypi
     implementation group: 'com.pi4j', name: 'pi4j-plugin-raspberrypi'
+    // https://mvnrepository.com/artifact/com.pi4j/pi4j-plugin-gpiod
+    implementation group: 'com.pi4j', name: 'pi4j-plugin-gpiod'
     // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter'
     // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test

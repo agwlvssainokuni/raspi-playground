@@ -16,7 +16,9 @@
 
 package cherry.raspi.dout;
 
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.IntStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +28,7 @@ import org.springframework.boot.ExitCodeGenerator;
 import org.springframework.stereotype.Component;
 
 import com.pi4j.context.Context;
+import com.pi4j.io.gpio.digital.DigitalState;
 
 import lombok.RequiredArgsConstructor;
 
@@ -41,11 +44,26 @@ public class DoutHandler implements ApplicationRunner, ExitCodeGenerator {
     @Override
     public void run(ApplicationArguments args) {
 
-        var boardinfo = pi4j.boardInfo();
-        logger.info("BoardInfo");
-        logger.info("  BoardModel: {}", boardinfo.getBoardModel().getLabel());
-        logger.info("  OperatingSystem: {}", boardinfo.getOperatingSystem());
-        logger.info("  JavaInfo: {}", boardinfo.getJavaInfo());
+        var dout = pi4j.dout().create(18);  // BCM 18
+        dout.config().shutdownState(DigitalState.LOW);
+        dout.addListener(event -> logger.info("{}", event));
+
+        IntStream.range(0, 10).forEach(i -> {
+            try {
+                Thread.sleep(500L);
+            } catch (InterruptedException ex) {
+                logger.warn("", ex);
+            }
+            dout.toggle();
+        });
+
+        var future = dout.blinkAsync(250, TimeUnit.MILLISECONDS);
+        try {
+            Thread.sleep(5_000L);
+        } catch (InterruptedException ex) {
+            logger.warn("", ex);
+        }
+        future.cancel(true);
 
         setExitCode(0);
     }
