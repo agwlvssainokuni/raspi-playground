@@ -1,1 +1,1 @@
-include "boardinfo"
+include "boardinfo", "dout"
