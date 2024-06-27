@@ -36,12 +36,12 @@ public class BoardInfoHandler implements ApplicationRunner, ExitCodeGenerator {
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private final AtomicReference<Integer> exitCode = new AtomicReference<>();
 
-    private final Context context;
+    private final Context pi4j;
 
     @Override
     public void run(ApplicationArguments args) {
 
-        var boardinfo = context.boardInfo();
+        var boardinfo = pi4j.boardInfo();
         logger.info("BoardInfo");
         logger.info("  BoardModel: {}", boardinfo.getBoardModel().getLabel());
         logger.info("  OperatingSystem: {}", boardinfo.getOperatingSystem());

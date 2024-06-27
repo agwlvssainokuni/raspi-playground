@@ -18,10 +18,6 @@ package cherry.raspi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-
-import com.pi4j.Pi4J;
-import com.pi4j.context.Context;
 
 @SpringBootApplication
 public class Main {
@@ -34,13 +30,6 @@ public class Main {
         try (var appctx = SpringApplication.run(Main.class, args)) {
             return SpringApplication.exit(appctx);
         }
-    }
-
-    @Bean
-    Context pi4jContext() {
-        return Pi4J.newContextBuilder()
-                .autoDetect()
-                .build();
     }
 
 }
