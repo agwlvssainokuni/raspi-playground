@@ -17,34 +17,31 @@
 package cherry.raspi.dout;
 
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.IntStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
-import org.springframework.boot.ExitCodeGenerator;
 import org.springframework.stereotype.Component;
 
 import com.pi4j.context.Context;
 import com.pi4j.io.gpio.digital.DigitalState;
 
+import cherry.raspi.BaseHandler;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor()
 @Component()
-public class DoutHandler implements ApplicationRunner, ExitCodeGenerator {
+public class DoutHandler extends BaseHandler {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
-    private final AtomicReference<Integer> exitCode = new AtomicReference<>();
 
     private final Context pi4j;
 
     @Override
     public void run(ApplicationArguments args) {
 
-        var dout = pi4j.dout().create(18);  // BCM 18
+        var dout = pi4j.dout().create(18); // BCM 18
         dout.config().shutdownState(DigitalState.LOW);
         dout.addListener(event -> logger.info("{}", event));
 
@@ -68,22 +65,4 @@ public class DoutHandler implements ApplicationRunner, ExitCodeGenerator {
         setExitCode(0);
     }
 
-    private synchronized void setExitCode(int code) {
-        exitCode.set(code);
-        notifyAll();
-    }
-
-    @Override
-    public synchronized int getExitCode() {
-        while (true) {
-            if (exitCode.get() != null) {
-                return exitCode.get();
-            }
-            try {
-                wait();
-            } catch (InterruptedException ex) {
-                // NOTHING TO DO
-            }
-        }
-    }
 }
