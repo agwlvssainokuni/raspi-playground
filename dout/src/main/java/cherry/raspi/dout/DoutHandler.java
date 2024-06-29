@@ -46,23 +46,23 @@ public class DoutHandler extends BaseHandler {
         dout.addListener(event -> logger.info("{}", event));
 
         IntStream.range(0, 10).forEach(i -> {
-            try {
-                Thread.sleep(500L);
-            } catch (InterruptedException ex) {
-                logger.warn("", ex);
-            }
+            sleepInterruptibly(500L);
             dout.toggle();
         });
 
         var future = dout.blinkAsync(250, TimeUnit.MILLISECONDS);
-        try {
-            Thread.sleep(5_000L);
-        } catch (InterruptedException ex) {
-            logger.warn("", ex);
-        }
+        sleepInterruptibly(5_000L);
         future.cancel(true);
 
         setExitCode(0);
+    }
+
+    private void sleepInterruptibly(long millis) {
+        try {
+            TimeUnit.MILLISECONDS.sleep(millis);
+        } catch (InterruptedException ex) {
+            logger.warn("", ex);
+        }
     }
 
 }
