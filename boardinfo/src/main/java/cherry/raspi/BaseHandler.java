@@ -16,7 +16,6 @@
 
 package cherry.raspi;
 
-import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -35,22 +34,20 @@ public class BaseHandler implements ApplicationRunner, ExitCodeGenerator {
     }
 
     public void setExitCode(int code) {
-        exitCode.updateAndGet(v -> Optional.ofNullable(v).orElse(code));
+        exitCode.set(code);
         latch.countDown();
     }
 
     @Override
     public int getExitCode() {
-        while (true) {
-            if (exitCode.get() != null) {
-                return exitCode.get();
-            }
+        while (latch.getCount() > 0L) {
             try {
                 latch.await();
             } catch (InterruptedException ex) {
                 // NOTHING TO DO
             }
         }
+        return exitCode.get();
     }
 
 }
