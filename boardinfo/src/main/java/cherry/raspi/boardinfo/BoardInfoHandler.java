@@ -35,7 +35,7 @@ public class BoardInfoHandler extends BaseHandler {
     private final Context pi4j;
 
     @Override
-    public void run(ApplicationArguments args) {
+    public int doRun(ApplicationArguments args) {
 
         var boardinfo = pi4j.boardInfo();
         logger.info("BoardInfo");
@@ -43,7 +43,7 @@ public class BoardInfoHandler extends BaseHandler {
         logger.info("  OperatingSystem: {}", boardinfo.getOperatingSystem());
         logger.info("  JavaInfo: {}", boardinfo.getJavaInfo());
 
-        setExitCode(0);
+        return 0;
     }
 
 }

@@ -28,12 +28,13 @@ public class BaseHandler implements ApplicationRunner, ExitCodeGenerator {
     private final AtomicReference<Integer> exitCode = new AtomicReference<>();
     private final CountDownLatch latch = new CountDownLatch(1);
 
-    @Override
-    public void run(ApplicationArguments args) {
-        setExitCode(0);
+    public int doRun(ApplicationArguments args) {
+        return 0;
     }
 
-    public void setExitCode(int code) {
+    @Override
+    public void run(ApplicationArguments args) {
+        var code = doRun(args);
         exitCode.set(code);
         latch.countDown();
     }

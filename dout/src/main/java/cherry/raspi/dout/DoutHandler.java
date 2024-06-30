@@ -39,7 +39,7 @@ public class DoutHandler extends BaseHandler {
     private final Context pi4j;
 
     @Override
-    public void run(ApplicationArguments args) {
+    public int doRun(ApplicationArguments args) {
 
         var dout = pi4j.dout().create(18); // BCM 18
         dout.config().shutdownState(DigitalState.LOW);
@@ -54,7 +54,7 @@ public class DoutHandler extends BaseHandler {
         sleepInterruptibly(5_000L);
         future.cancel(true);
 
-        setExitCode(0);
+        return 0;
     }
 
     private void sleepInterruptibly(long millis) {
